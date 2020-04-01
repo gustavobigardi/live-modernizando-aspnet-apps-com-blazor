@@ -1,0 +1,18 @@
+﻿@page
+@model Modernizing.Pages.Pages.Raffles.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<form method="post">
+    <h1>Sorteio</h1>
+
+    <h4>Participante: @(Model.Participant != null ? $"{Model.Participant.Name} ({Model.Participant.Email})" : "Pendente")</h4>
+
+    <label for="meetupId">Meetup:</label>
+    <select name="meetupId" asp-items="Model.Meetups" asp-for="MeetupId"></select>
+    <input type="submit" value="Sortear" class="btn btn-primary" />
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

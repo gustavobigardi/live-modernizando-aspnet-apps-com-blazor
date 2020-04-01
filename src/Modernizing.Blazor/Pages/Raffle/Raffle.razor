@@ -1,0 +1,42 @@
+﻿@page "/raffle"
+
+@using Modernizing.Core.Services
+@using Modernizing.Core.Dtos 
+@inject RaffleService service
+@inject MeetupService meetupService 
+
+<h3>Sorteio</h3>
+
+@*<h4>Participante: @(Participant != null ? $"{Participant.Name} ({Participant.Email})" : "Pendente")</h4>*@
+<SelectedParticipant Name="@(Participant != null ? Participant.Name : "Pendente")"></SelectedParticipant>
+
+<label>Meetups</label>
+@*<InputSelect @bind-Value="MeetupId">
+    @foreach(var meetup in Meetups)
+    {
+        <option value="@meetup.Id">@meetup.Name</option>
+    }
+</InputSelect>*@ 
+
+<button type="button" @onclick="Sortear">Sortear</button>
+
+@code {
+    private IEnumerable<MeetupDto> Meetups = new List<MeetupDto>();
+    private string MeetupId = "1";
+    private ParticipantDto Participant;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Meetups = await meetupService.GetAllAsync();
+    }
+
+    private async Task Sortear()
+    {
+        if (string.IsNullOrWhiteSpace(MeetupId))
+        {
+            return;
+        }
+
+        Participant = await service.RaffleAsync(int.Parse(MeetupId));
+    }
+}
